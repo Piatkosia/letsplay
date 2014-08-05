@@ -53,7 +53,6 @@ namespace LetsPlay
             if (cmd.DataContext is Game)
             {
                 Game giera = (Game)cmd.DataContext;
-                MessageBox.Show(giera.pathFile);
                 try
                 {
                     System.Diagnostics.Process.Start(giera.pathFile);
@@ -62,7 +61,7 @@ namespace LetsPlay
                 {
                     FindBinary(giera);
                 }
-                okienko.WindowState = WindowState.Minimized;
+                window.WindowState = WindowState.Minimized;
             }
         }
 
@@ -74,7 +73,7 @@ namespace LetsPlay
                 var files = System.IO.Directory.GetFiles(giera.InstallFolder, "*.exe");
                 tmplist = files;
             }
-            if (tmplist[tmplistiterator].Contains("uninst"))
+            if (tmplist[tmplistiterator].Contains("unins"))
             { 
                 tmplistiterator++; 
             }
