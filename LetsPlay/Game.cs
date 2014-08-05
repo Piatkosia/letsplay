@@ -9,5 +9,6 @@ namespace LetsPlay
     {
         public string gameName {get; set;}
         public string pathFile { get; set; }
+        public string InstallFolder { get; set; }
     }
 }

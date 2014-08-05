@@ -22,6 +22,8 @@ namespace LetsPlay
     public partial class MainWindow : Window
     {
         public ObservableCollection<Game> Gry;
+        string[] tmplist;
+        uint tmplistiterator = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -33,8 +35,7 @@ namespace LetsPlay
                 Gry = new ObservableCollection<Game>();
                 foreach (ManagementObject queryObj in searcher.Get())
                 {
-                    
-                    Gry.Add(new Game{gameName = queryObj["Name"].ToString(), pathFile = queryObj["GDFBinaryPath"].ToString() });
+                    Gry.Add(new Game { gameName = queryObj["Name"].ToString(), pathFile = queryObj["GDFBinaryPath"].ToString(), InstallFolder = queryObj["GameInstallPath"].ToString() });
                 }
                 listaGier.DataContext = Gry;
             }
@@ -52,9 +53,33 @@ namespace LetsPlay
             if (cmd.DataContext is Game)
             {
                 Game giera = (Game)cmd.DataContext;
-                System.Diagnostics.Process.Start(giera.pathFile);
+                MessageBox.Show(giera.pathFile);
+                try
+                {
+                    System.Diagnostics.Process.Start(giera.pathFile);
+                }
+                catch (Exception)
+                {
+                    FindBinary(giera);
+                }
                 okienko.WindowState = WindowState.Minimized;
             }
+        }
+
+        private void FindBinary(Game giera)
+        {
+            if (tmplist == null)
+            {
+                
+                var files = System.IO.Directory.GetFiles(giera.InstallFolder, "*.exe");
+                tmplist = files;
+            }
+            if (tmplist[tmplistiterator].Contains("uninst"))
+            { 
+                tmplistiterator++; 
+            }
+            System.Diagnostics.Process.Start(tmplist[tmplistiterator]);
+            tmplistiterator++;
         }
     }
 }
